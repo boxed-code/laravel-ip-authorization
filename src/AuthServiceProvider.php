@@ -3,8 +3,8 @@
 namespace BoxedCode\Laravel\Auth\Ip;
 
 use BoxedCode\Laravel\Auth\Ip\AuthManager;
-use BoxedCode\Laravel\Auth\Ip\Contracts\AuthManager as ManagerContract;
-use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager as RepositoryManagerContract;
+use BoxedCode\Laravel\Auth\Ip\Contracts\AuthManager as AuthManagerContract;
+use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager as RepoManagerContract;
 use BoxedCode\Laravel\Auth\Ip\Repositories\RepositoryManager;
 use Illuminate\Support\ServiceProvider;
 use Torann\GeoIP\GeoIP;
@@ -20,19 +20,30 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom($this->packagePath('config/ipauth.php'), 'ipauth');
 
-        $this->app->bind(RepositoryManagerContract::class, function ($app) {
+        $this->registerRespositoryManager();
+
+        $this->registerAuthManager();
+    }
+
+    protected function registerRespositoryManager()
+    {
+        $this->app->bind(RepoManagerContract::class, function ($app) {
             return new RepositoryManager($app);
         });
+    }
 
-        $this->app->singleton(ManagerContract::class, function($app) {
-            $repository = $app->make(RepositoryManagerContract::class);
+    protected function registerAuthManager()
+    {
+        $this->app->singleton(AuthManagerContract::class, function($app) {
+            $repository = $app->make(RepoManagerContract::class);
 
-            $config = $app->config->get('ipauth');
+            $config = $app->config->get('ipauth', []);
 
-            return new AuthManager($repository, $config);
+            return (new AuthManager($repository, $config))
+                ->setEventDispatcher($app['events']);
         });
 
-        $this->app->alias(ManagerContract::class, 'auth.ip');
+        $this->app->alias(AuthManagerContract::class, 'auth.ip');
     }
 
     /**
