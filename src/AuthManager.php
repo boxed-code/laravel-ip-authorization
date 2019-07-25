@@ -4,6 +4,7 @@ namespace BoxedCode\Laravel\Auth\Ip;
 
 use BoxedCode\Laravel\Auth\Ip\Contracts\AuthManager as ManagerContract;
 use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -110,6 +111,8 @@ class AuthManager implements ManagerContract
     public function setEventDispatcher(Dispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
+
+        return $this;
     }
 
     public function getEventDispatcher()
