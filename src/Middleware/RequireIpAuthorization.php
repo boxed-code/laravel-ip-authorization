@@ -6,7 +6,7 @@ use BoxedCode\Laravel\Auth\Ip\Contracts\AuthManager;
 use Closure;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class RequireIpAuthentication
+class RequireIpAuthorization
 {
     protected $manager;
 
@@ -35,6 +35,10 @@ class RequireIpAuthentication
     public function handle($request, Closure $next)
     {
         if (!$this->shouldAuthorize($request)) {
+            if ($response = $this->redirect($request)) {
+                return $response;
+            }
+
             throw new AccessDeniedHttpException;
         }
 
@@ -45,6 +49,11 @@ class RequireIpAuthentication
     {
         return $this->inExceptArray($request) || 
             $this->manager->authorize($request);
+    }
+
+    protected function redirect($request)
+    {
+        //
     }
 
     /**
