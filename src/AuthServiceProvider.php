@@ -18,7 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom($this->packagePath('config/ipauth.php'), 'ipauth');
+        $this->mergeConfigFrom($this->packagePath('config/ip_auth.php'), 'ip_auth');
 
         $this->registerRespositoryManager();
 
@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->singleton(AuthManagerContract::class, function($app) {
             $repository = $app->make(RepoManagerContract::class);
 
-            $config = $app->config->get('ipauth', []);
+            $config = $app->config->get('ip_auth', []);
 
             return (new AuthManager($repository, $config))
                 ->setEventDispatcher($app['events']);
