@@ -3,7 +3,9 @@
 namespace BoxedCode\Laravel\Auth\Ip\Repositories;
 
 use BoxedCode\Laravel\Auth\Ip\Contracts\Repository;
-use Net\Ip;
+use IPTools\IP;
+use IPTools\Network;
+use IPTools\Range;
 
 class ConfigRepository implements Repository
 {
@@ -12,6 +14,16 @@ class ConfigRepository implements Repository
     public function __construct(array $config)
     {
         $this->config = $config;
+    }
+
+    public function whitelistAddress($address)
+    {
+        
+    }
+
+    public function blacklistAddress($address)
+    {
+        
     }
 
     public function isWhitelistedAddress($address)
@@ -38,8 +50,12 @@ class ConfigRepository implements Repository
 
     protected function matchAddress($addressToMatch, array $addresses)
     {
-        if (Ip::match($addressToMatch, $addresses)) {
-            return true;
+        $ip = IP::parse($addressToMatch);
+        
+        foreach ($addresses as $address) {
+            if (Range::parse($address)->contains($ip)) {
+                return true;
+            }
         }
 
         return false;
