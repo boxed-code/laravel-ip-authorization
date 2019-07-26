@@ -7,9 +7,8 @@ use BoxedCode\Laravel\Auth\Ip\Contracts\AuthManager as AuthManagerContract;
 use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager as RepoManagerContract;
 use BoxedCode\Laravel\Auth\Ip\Repositories\RepositoryManager;
 use Illuminate\Support\ServiceProvider;
-use Torann\GeoIP\GeoIP;
 
-class AuthServiceProvider extends ServiceProvider
+class IpAuthServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
@@ -25,6 +24,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerAuthManager();
     }
 
+    /**
+     * Register the repository manager within the container.
+     * 
+     * @return void
+     */
     protected function registerRespositoryManager()
     {
         $this->app->bind(RepoManagerContract::class, function ($app) {
@@ -32,6 +36,11 @@ class AuthServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Register the authorization manager within the container.
+     * 
+     * @return void
+     */
     protected function registerAuthManager()
     {
         $this->app->singleton(AuthManagerContract::class, function($app) {
@@ -53,7 +62,17 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Register the package configuration to publish.
+        $this->publishes(
+            [$this->packagePath('config/ip_auth.php') => config_path('ip_auth.php')], 
+            'config'
+        );
+
+        // Register the migrations to publish.
+        $this->publishes(
+            [$this->packagePath('migrations') => database_path('migrations')], 
+            'migrations'
+        );
     }
 
     /**

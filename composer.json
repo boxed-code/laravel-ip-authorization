@@ -1,6 +1,6 @@
 {
     "name": "boxed-code/laravel-ip-authorization",
-    "description": "Authorize access based on IP address, range or subnet.",
+    "description": "Authorize access based on IPv4 & IPv6 addresses, ranges, subnets or wildcards.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -32,7 +32,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "BoxedCode\\Laravel\\Auth\\Ip\\AuthServiceProvider"
+                "BoxedCode\\Laravel\\Auth\\Ip\\IpAuthServiceProvider"
             ]
         }
     }

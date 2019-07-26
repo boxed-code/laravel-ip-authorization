@@ -2,13 +2,10 @@
 
 namespace BoxedCode\Laravel\Auth\Ip\Repositories;
 
-use BoxedCode\Laravel\Auth\Ip\Contracts\Repository;
-use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager as RepositoryManagerContract;
-use BoxedCode\Laravel\Auth\Ip\Repositories\ConfigRepository;
+use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager as ManagerContract;
 use Illuminate\Support\Manager;
-use Net\Ip;
 
-class RepositoryManager extends Manager implements RepositoryManagerContract
+class RepositoryManager extends Manager implements ManagerContract
 {
     /**
      * Get the default driver name.
@@ -17,13 +14,43 @@ class RepositoryManager extends Manager implements RepositoryManagerContract
      */
     public function getDefaultDriver()
     {
-        return $this->app->config->get('ipauth.repositories.default', 'config');
+        return $this->app->config->get('ip_auth.default_repository', 'config');
     }
 
-    public function createConfigDriver()
+    /**
+     * Create a configuration repository instance.
+     * 
+     * @return \BoxedCode\Laravel\Auth\Ip\Repositories\ConfigRepository
+     */
+    protected function createConfigDriver()
     {
+        $key = $this->app['config']->get(
+            'ip_auth.repositories.config.key', 
+            'ip_auth'
+        );
+        
         return new ConfigRepository(
-            $this->app['config']->get('ipauth', [])
+            $this->app['config']->get($key, [])
+        );
+    }
+
+    /**
+     * Create a database repository instance.
+     * 
+     * @return \BoxedCode\Laravel\Auth\Ip\Repositories\DatabaseRepository
+     */
+    protected function createDatabaseDriver()
+    {
+        $config = $this->app['config']->get(
+            'ip_auth.repositories.database'
+        );
+
+        $connection = $this->app['db']->connection(
+            $config['connection']
+        );
+
+        return new DatabaseRepository(
+            $connection, $config
         );
     }
 }
