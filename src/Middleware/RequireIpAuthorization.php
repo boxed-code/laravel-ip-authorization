@@ -45,8 +45,9 @@ class RequireIpAuthorization
      * @throws AccessDeniesHttpException 
      */
     public function handle($request, Closure $next, $directives = null)
-    {
+    {   
         if (!$this->shouldAuthorize($request, $directives)) {
+
             if ($response = $this->redirect($request)) {
                 return $response;
             }

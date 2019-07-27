@@ -2,6 +2,9 @@
 
 namespace BoxedCode\Laravel\Auth\Ip\Contracts;
 
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Http\Request;
+
 interface AuthManager
 {
     /**

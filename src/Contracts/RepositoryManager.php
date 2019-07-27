@@ -2,6 +2,8 @@
 
 namespace BoxedCode\Laravel\Auth\Ip\Contracts;
 
+use Closure;
+
 interface RepositoryManager
 {
     /**
