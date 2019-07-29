@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'default_action' => 'deny',
+    'default_action' => env('IP_AUTH_DEFAULT_ACTION', 'deny'),
  
     /*
     |--------------------------------------------------------------------------
@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'default_repository' => 'config',
+    'default_repository' => env('IP_AUTH_REPOSITORY', 'config'),
 
     'repositories' => [
 
