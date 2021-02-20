@@ -4,7 +4,6 @@ namespace BoxedCode\Laravel\Auth\Ip\Repositories;
 
 use BoxedCode\Laravel\Auth\Ip\Contracts\Repository;
 use IPTools\IP;
-use IPTools\Network;
 use IPTools\Range;
 use Exception;
 
