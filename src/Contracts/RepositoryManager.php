@@ -16,18 +16,20 @@ interface RepositoryManager
     /**
      * Get a driver instance.
      *
-     * @param  string  $driver
-     * @return mixed
+     * @param string $driver
      *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function driver($driver = null);
 
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string    $driver
-     * @param  \Closure  $callback
+     * @param string   $driver
+     * @param \Closure $callback
+     *
      * @return $this
      */
     public function extend($driver, Closure $callback);

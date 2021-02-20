@@ -19,16 +19,16 @@ class RepositoryManager extends Manager implements ManagerContract
 
     /**
      * Create a configuration repository instance.
-     * 
+     *
      * @return \BoxedCode\Laravel\Auth\Ip\Repositories\ConfigRepository
      */
     protected function createConfigDriver()
     {
         $key = $this->app['config']->get(
-            'ip_auth.repositories.config.key', 
+            'ip_auth.repositories.config.key',
             'ip_auth'
         );
-        
+
         return new ConfigRepository(
             $this->app['config']->get($key, [])
         );
@@ -36,7 +36,7 @@ class RepositoryManager extends Manager implements ManagerContract
 
     /**
      * Create a database repository instance.
-     * 
+     *
      * @return \BoxedCode\Laravel\Auth\Ip\Repositories\DatabaseRepository
      */
     protected function createDatabaseDriver()
@@ -50,7 +50,8 @@ class RepositoryManager extends Manager implements ManagerContract
         );
 
         return new DatabaseRepository(
-            $connection, $config
+            $connection,
+            $config
         );
     }
 }

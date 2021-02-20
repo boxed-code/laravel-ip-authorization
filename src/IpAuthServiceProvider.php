@@ -2,7 +2,6 @@
 
 namespace BoxedCode\Laravel\Auth\Ip;
 
-use BoxedCode\Laravel\Auth\Ip\AuthManager;
 use BoxedCode\Laravel\Auth\Ip\Contracts\AuthManager as AuthManagerContract;
 use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager as RepoManagerContract;
 use BoxedCode\Laravel\Auth\Ip\Repositories\RepositoryManager;
@@ -26,7 +25,7 @@ class IpAuthServiceProvider extends ServiceProvider
 
     /**
      * Register the repository manager within the container.
-     * 
+     *
      * @return void
      */
     protected function registerRespositoryManager()
@@ -38,12 +37,12 @@ class IpAuthServiceProvider extends ServiceProvider
 
     /**
      * Register the authorization manager within the container.
-     * 
+     *
      * @return void
      */
     protected function registerAuthManager()
     {
-        $this->app->singleton(AuthManagerContract::class, function($app) {
+        $this->app->singleton(AuthManagerContract::class, function ($app) {
             $repository = $app->make(RepoManagerContract::class);
 
             $config = $app->config->get('ip_auth', []);
@@ -64,13 +63,13 @@ class IpAuthServiceProvider extends ServiceProvider
     {
         // Register the package configuration to publish.
         $this->publishes(
-            [$this->packagePath('config/ip_auth.php') => config_path('ip_auth.php')], 
+            [$this->packagePath('config/ip_auth.php') => config_path('ip_auth.php')],
             'config'
         );
 
         // Register the migrations to publish.
         $this->publishes(
-            [$this->packagePath('migrations') => database_path('migrations')], 
+            [$this->packagePath('migrations') => database_path('migrations')],
             'migrations'
         );
     }
@@ -79,6 +78,7 @@ class IpAuthServiceProvider extends ServiceProvider
      * Loads a path relative to the package base directory.
      *
      * @param string $path
+     *
      * @return string
      */
     protected function packagePath($path = '')
