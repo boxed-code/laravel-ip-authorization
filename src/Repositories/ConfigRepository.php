@@ -3,42 +3,42 @@
 namespace BoxedCode\Laravel\Auth\Ip\Repositories;
 
 use BoxedCode\Laravel\Auth\Ip\Contracts\Repository;
+use Exception;
 use IPTools\IP;
 use IPTools\Range;
-use Exception;
 
 class ConfigRepository implements Repository
 {
     /**
      * The configuration.
-     * 
+     *
      * @var array
      */
     protected $config;
 
     /**
      * Create a new config repository instance.
-     * 
+     *
      * @param array $config
      */
     public function __construct(array $config)
     {
         $this->config = $config;
-
     }
-    
+
     /**
      * Check whether an address of a give type exists within the given list.
-     * 
-     * @param  string $address 
-     * @param  string $list    
-     * @param  string $type    
+     *
+     * @param string $address
+     * @param string $list
+     * @param string $type
+     *
      * @return bool
      */
     public function exists($address, $list, $type)
     {
         $ip = IP::parse($address);
-        
+
         foreach ($this->all($list, $type) as $address) {
             if (Range::parse($address)->contains($ip)) {
                 return true;
@@ -50,10 +50,11 @@ class ConfigRepository implements Repository
 
     /**
      * Add an entry to the repository.
-     * 
-     * @param  string $address
-     * @param  string $list   
-     * @param  string $type   
+     *
+     * @param string $address
+     * @param string $list
+     * @param string $type
+     *
      * @return void
      */
     public function add($address, $list, $type)
@@ -65,11 +66,12 @@ class ConfigRepository implements Repository
 
     /**
      * Delete an entry from the repository.
-     * 
-     * @param  string $address 
-     * @param  string $list    
-     * @param  string $type    
-     * @return void   
+     *
+     * @param string $address
+     * @param string $list
+     * @param string $type
+     *
+     * @return void
      */
     public function delete($address, $list, $type)
     {
@@ -80,15 +82,15 @@ class ConfigRepository implements Repository
 
     /**
      * Get all of the entries of a given type within a given list.
-     * 
-     * @param  string $list
-     * @param  string $type
-     * @return array      
+     *
+     * @param string $list
+     * @param string $type
+     *
+     * @return array
      */
     public function all($list, $type)
     {
-        switch ($type)
-        {
+        switch ($type) {
             case static::TYPE_ADDRESS:
                 $key = 'addresses';
                 break;
@@ -96,7 +98,7 @@ class ConfigRepository implements Repository
             default:
                 throw new Exception(
                     sprintf(
-                        'Invalid type specified. [%s]', 
+                        'Invalid type specified. [%s]',
                         $type
                     )
                 );

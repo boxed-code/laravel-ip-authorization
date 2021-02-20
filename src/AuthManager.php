@@ -7,37 +7,36 @@ use BoxedCode\Laravel\Auth\Ip\Contracts\Repository;
 use BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 class AuthManager implements ManagerContract
 {
     /**
      * The repository manager instance.
-     * 
+     *
      * @var \BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager
      */
     protected $repository;
 
     /**
      * The configuration.
-     * 
+     *
      * @var array
      */
     protected $config;
 
     /**
      * The event dispatcher instance.
-     * 
+     *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $dispatcher;
 
     /**
      * Create a new authorization manager instance.
-     * 
+     *
      * @param \BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager $repository
-     * @param array $config
+     * @param array                                                  $config
      */
     public function __construct(RepositoryManager $repository, array $config)
     {
@@ -47,29 +46,33 @@ class AuthManager implements ManagerContract
     }
 
     /**
-     * Determine whether a request is authorized and fire the authorization 
+     * Determine whether a request is authorized and fire the authorization
      * events as necessary.
-     * 
-     * @param  \Illuminate\Http\Request    $request
-     * @param  array|null $directives
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param array|null               $directives
+     *
      * @return bool
      */
     public function authorize(Request $request, array $directives = null)
     {
         if ($this->validate($request, $directives)) {
             $this->event(new Events\Authorized($request));
+
             return true;
         }
 
         $this->event(new Events\Denied($request));
+
         return false;
     }
 
     /**
      * Determine whether a request is authorized.
-     * 
-     * @param  \Illuminate\Http\Request    $request
-     * @param  array|null $directives
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param array|null               $directives
+     *
      * @return bool
      */
     public function validate(Request $request, array $directives = null)
@@ -79,12 +82,12 @@ class AuthManager implements ManagerContract
         $directives = $directives ?? $this->config['directives'];
 
         foreach ($directives as $list => $action) {
-            // If the given address is listed within the list specified 
-            // by the directive with check the action type associated 
+            // If the given address is listed within the list specified
+            // by the directive with check the action type associated
             // with the directive and return the appropriate response.
             $isListed = $this->repository->exists(
-                $address, 
-                $list, 
+                $address,
+                $list,
                 Repository::TYPE_ADDRESS
             );
 
@@ -93,19 +96,20 @@ class AuthManager implements ManagerContract
             }
         }
 
-        // The request was not handled by any of the configured directives, 
-        // so we need to return the default response, this can be setup within 
+        // The request was not handled by any of the configured directives,
+        // so we need to return the default response, this can be setup within
         // the packages configuration.
         return $this->respond($address, $this->config['default_action']);
     }
 
     /**
      * Transform a string of directive definitions into array format.
-     * 
+     *
      * e.g. 'whitelist:allow;blacklist:deny' ==>
      *      ['whitelist' => 'allow', 'blacklist' => 'deny']
-     * 
-     * @param  string $directives
+     *
+     * @param string $directives
+     *
      * @return array
      */
     public function getDirectivesFromString(string $directives)
@@ -116,7 +120,7 @@ class AuthManager implements ManagerContract
 
         foreach ($stringDirectives as $directive) {
             [$list, $action] = explode(':', $directive);
-            $directives[$list] = $action; 
+            $directives[$list] = $action;
         }
 
         return $directives;
@@ -124,7 +128,7 @@ class AuthManager implements ManagerContract
 
     /**
      * Get the repository manager instance.
-     * 
+     *
      * @return \BoxedCode\Laravel\Auth\Ip\Contracts\RepositoryManager
      */
     public function getRepository()
@@ -134,7 +138,7 @@ class AuthManager implements ManagerContract
 
     /**
      * Set the event dispatcher instance.
-     * 
+     *
      * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher
      */
     public function setEventDispatcher(Dispatcher $dispatcher)
@@ -146,7 +150,7 @@ class AuthManager implements ManagerContract
 
     /**
      * Get the event dispatcher.
-     * 
+     *
      * @return \Illuminate\Contracts\Events\Dispatcher|null
      */
     public function getEventDispatcher()
@@ -156,7 +160,7 @@ class AuthManager implements ManagerContract
 
     /**
      * Fire an event if the dispatcher is set.
-     * 
+     *
      * @return void
      */
     protected function event()
@@ -168,20 +172,20 @@ class AuthManager implements ManagerContract
 
     /**
      * Respond to a directive match.
-     * 
-     * @param  string $address 
-     * @param  string $action 
-     * @param  string $list   
-     * @return bool
+     *
+     * @param string $address
+     * @param string $action
+     * @param string $list
+     *
      * @throws InvalidArgumentException
+     *
+     * @return bool
      */
     protected function respond($address, $action, $list = null)
     {
         if (static::ACTION_ALLOW === $action) {
             return true;
-        } 
-
-        elseif(static::ACTION_DENY === $action) {
+        } elseif (static::ACTION_DENY === $action) {
             return false;
         }
 
@@ -195,8 +199,9 @@ class AuthManager implements ManagerContract
 
     /**
      * Resolve an IP address from the current request.
-     * 
-     * @param  \Illuminate\Http\Request $request
+     *
+     * @param \Illuminate\Http\Request $request
+     *
      * @return string
      */
     protected function resolveAddressFromRequest(Request $request)

@@ -6,30 +6,30 @@ return [
     | Default Action
     |--------------------------------------------------------------------------
     |
-    | By default, if the request matches none of the defined derivatives we can 
+    | By default, if the request matches none of the defined derivatives we can
     | either deny or allow the user. You can specify this default action here.
     |
     */
 
     'default_action' => env('IP_AUTH_DEFAULT_ACTION', 'deny'),
- 
+
     /*
     |--------------------------------------------------------------------------
     | Directives
     |--------------------------------------------------------------------------
     |
-    | Directives specify which groups of addresses are allowed or denied access. 
-    | A directive consists of a list name and an action to take if an address exists 
-    | within that list. Directives are processed sequentially, the result of the first 
-    | matched directive will be returned. By default, the blacklist is processed before 
-    | the whitelist, if an address was in both lists it would denied as the first 
-    | directive to be processed is the blacklist. You can reorder the directives to 
+    | Directives specify which groups of addresses are allowed or denied access.
+    | A directive consists of a list name and an action to take if an address exists
+    | within that list. Directives are processed sequentially, the result of the first
+    | matched directive will be returned. By default, the blacklist is processed before
+    | the whitelist, if an address was in both lists it would denied as the first
+    | directive to be processed is the blacklist. You can reorder the directives to
     | suit your needs.
     |
-    | You can create as many directives as you would like, by default there are two 
+    | You can create as many directives as you would like, by default there are two
     | whitelist & blacklist.
     |
-    */   
+    */
 
     'directives' => [
         'blacklist' => 'deny',
@@ -41,8 +41,8 @@ return [
     | List Repositories
     |--------------------------------------------------------------------------
     |
-    | Out of the box the package supports loading address lists from configuration 
-    | or the database. The default is configuration, you may configure whitelisted 
+    | Out of the box the package supports loading address lists from configuration
+    | or the database. The default is configuration, you may configure whitelisted
     | or blacklisted addresses at the bottom of this file.
     |
     */
@@ -57,8 +57,8 @@ return [
 
         'database' => [
             'connection' => null,
-            'table' => 'ip_auth_access_list',
-        ]
+            'table'      => 'ip_auth_access_list',
+        ],
 
     ],
 
@@ -67,11 +67,11 @@ return [
     | Configuration Based Address Lists
     |--------------------------------------------------------------------------
     |
-    | If you decide to use the default configuration list repository, you can 
+    | If you decide to use the default configuration list repository, you can
     | simply add the addresses you wish to control below.
     |
     */
-   
+
     'addresses' => [
 
         'whitelist' => [
@@ -95,6 +95,6 @@ return [
 
         'custom_list' => [
             // place custom address definitions here.
-        ]
-    ]
+        ],
+    ],
 ];

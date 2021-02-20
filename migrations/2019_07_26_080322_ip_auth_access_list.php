@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class IpAuthAccessList extends Migration
 {
@@ -13,7 +12,7 @@ class IpAuthAccessList extends Migration
      */
     public function up()
     {
-        Schema::create('ip_auth_access_list', function($table) {
+        Schema::create('ip_auth_access_list', function ($table) {
             $table->increments('id');
             $table->string('label');
             $table->string('list');
