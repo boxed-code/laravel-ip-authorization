@@ -14,7 +14,7 @@ class RepositoryManager extends Manager implements ManagerContract
      */
     public function getDefaultDriver()
     {
-        return $this->app->config->get('ip_auth.default_repository', 'config');
+        return $this->container->config->get('ip_auth.default_repository', 'config');
     }
 
     /**
@@ -24,13 +24,13 @@ class RepositoryManager extends Manager implements ManagerContract
      */
     protected function createConfigDriver()
     {
-        $key = $this->app['config']->get(
+        $key = $this->container['config']->get(
             'ip_auth.repositories.config.key',
             'ip_auth'
         );
 
         return new ConfigRepository(
-            $this->app['config']->get($key, [])
+            $this->container['config']->get($key, [])
         );
     }
 
@@ -41,11 +41,11 @@ class RepositoryManager extends Manager implements ManagerContract
      */
     protected function createDatabaseDriver()
     {
-        $config = $this->app['config']->get(
+        $config = $this->container['config']->get(
             'ip_auth.repositories.database'
         );
 
-        $connection = $this->app['db']->connection(
+        $connection = $this->container['db']->connection(
             $config['connection']
         );
 
